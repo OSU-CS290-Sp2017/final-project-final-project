@@ -2,27 +2,27 @@ const path = require('path');
 const mime = require('mime');
 const fs = require('mz/fs');
 
-// url: 类似 '/static/'
-// dir: 类似 __dirname + '/static'
+// url:  like'/static/'
+// dir: like __dirname + '/static'
 function staticFiles(url, dir) {
     return async (ctx, next) => {
         let rpath = ctx.request.path;
-        // 判断是否以指定的url开头:
+        // check if it is the correct url:
         if (rpath.startsWith(url)) {
-            // 获取文件完整路径:
+            // get the full path :
             let fp = path.join(dir, rpath.substring(url.length));
-            // 判断文件是否存在:
+            // check if the file exits or not:
             if (await fs.exists(fp)) {
-                // 查找文件的mime:
+                // search the mime of the file:
                 ctx.response.type = mime.lookup(rpath);
-                // 读取文件内容并赋值给response.body:
+                // read context of the file to give it to response.body:
                 ctx.response.body = await fs.readFile(fp);
             } else {
-                // 文件不存在:
+                // the file doesn't exit:
                 ctx.response.status = 404;
             }
         } else {
-            // 不是指定前缀的URL，继续处理下一个middleware:
+            // not the corrcet url, keep dealing the next middleware:
             await next();
         }
     };
