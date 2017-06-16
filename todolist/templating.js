@@ -1,4 +1,6 @@
-// 这个middleware的作用是给ctx对象绑定一个render(view, model)的方法，这样，后面的Controller就可以调用这个方法来渲染模板了
+// the function of middleware is to give ctx object a binding render so that controller can call it to render view.
+
+
 const nunjucks = require('nunjucks');
 
 function createEnv(path, opts) {
