@@ -24,17 +24,17 @@ function createEnv(path, opts) {
 }
 
 function templating(path, opts) {
-    // 创建Nunjucks的env对象:
+    // create Nunjucks env object:
     var env = createEnv(path, opts);
     return async (ctx, next) => {
-        // 给ctx绑定render函数:
+        // give ctx a binding render function:
         ctx.render = function (view, model) {
-            // 把render后的内容赋值给response.body:
+            // give the context after render to response.body:
             ctx.response.body = env.render(view, Object.assign({}, ctx.state || {}, model || {}));
-            // 设置Content-Type:
+            // set Content-Type:
             ctx.response.type = 'text/html';
         };
-        // 继续处理请求:
+        // keep deal the request:
         await next();
     };
 }
